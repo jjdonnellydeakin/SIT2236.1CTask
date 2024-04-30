@@ -83,8 +83,6 @@
     }
 }
 
-// Simple change: Added comments to describe each stage and post-actions for success and failure
-
 </script>
     <sandbox>true</sandbox>
   </definition>
