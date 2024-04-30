@@ -103,18 +103,19 @@
     post {
         success {
             // Email notification for pipeline success
-            emailext subject: "Pipeline Success Notification - ${currentBuild.result}",
-                      body: "Pipeline completed successfully. Status: ${currentBuild.result}",
+            emailext subject: "Pipeline Success Notification - ${currentBuild.currentResult}",
+                      body: "Pipeline completed successfully. Status: ${currentBuild.currentResult}",
                       to: 'jjdonnelly@deakin.edu.au'
         }
         failure {
             // Email notification for pipeline failure
-            emailext subject: "Pipeline Failure Notification - ${currentBuild.result}",
-                      body: "Pipeline failed. Status: ${currentBuild.result}. Please check the logs for details.",
+            emailext subject: "Pipeline Failure Notification - ${currentBuild.currentResult}",
+                      body: "Pipeline failed. Status: ${currentBuild.currentResult}. Please check the logs for details.",
                       to: 'jjdonnelly@deakin.edu.au'
         }
     }
 }
+
 
 
 </script>
