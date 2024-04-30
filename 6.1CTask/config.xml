@@ -37,6 +37,7 @@
             }
             post {
                 success {
+                    echo 'Unit and Integration Tests - Success'
                     // Email notification for stage success
                     emailext subject: "Unit and Integration Tests - Success",
                               body: "Unit and integration tests completed successfully.",
@@ -44,6 +45,7 @@
                               attachmentsPattern: '**/var/jenkins_home/logs/tasks/*'
                 }
                 failure {
+                    echo 'Unit and Integration Tests - Failure'
                     // Email notification for stage failure
                     emailext subject: "Unit and Integration Tests - Failure",
                               body: "Unit and integration tests failed. Please check the logs for details.",
@@ -65,6 +67,7 @@
             }
             post {
                 success {
+                    echo 'Security Scan - Success'
                     // Email notification for stage success
                     emailext subject: "Security Scan - Success",
                               body: "Security scan completed successfully.",
@@ -72,6 +75,7 @@
                               attachmentsPattern: '**/var/jenkins_home/logs/tasks/*'
                 }
                 failure {
+                    echo 'Security Scan - Failure'
                     // Email notification for stage failure
                     emailext subject: "Security Scan - Failure",
                               body: "Security scan failed. Please check the logs for details.",
@@ -102,12 +106,14 @@
 
     post {
         success {
+            echo 'Pipeline Success Notification'
             // Email notification for pipeline success
             emailext subject: "Pipeline Success Notification - ${currentBuild.currentResult}",
                       body: "Pipeline completed successfully. Status: ${currentBuild.currentResult}",
                       to: 'jjdonnelly@deakin.edu.au'
         }
         failure {
+            echo 'Pipeline Failure Notification'
             // Email notification for pipeline failure
             emailext subject: "Pipeline Failure Notification - ${currentBuild.currentResult}",
                       body: "Pipeline failed. Status: ${currentBuild.currentResult}. Please check the logs for details.",
@@ -115,6 +121,7 @@
         }
     }
 }
+
 
 
 
