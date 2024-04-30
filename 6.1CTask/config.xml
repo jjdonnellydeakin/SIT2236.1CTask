@@ -70,7 +70,7 @@
                     echo 'Security Scan - Success'
                     // Email notification for stage success
                     emailext subject: "Security Scan - Success",
-                              body: "Security scan completed successfully.",
+                              body: "Security scan completed successfully. Stage status: ${currentBuild.currentResult}",
                               to: 'jjdonnelly@deakin.edu.au',
                               attachmentsPattern: '**/var/jenkins_home/logs/tasks/*'
                 }
@@ -78,7 +78,7 @@
                     echo 'Security Scan - Failure'
                     // Email notification for stage failure
                     emailext subject: "Security Scan - Failure",
-                              body: "Security scan failed. Please check the logs for details.",
+                              body: "Security scan failed. Please check the logs for details. Stage status: ${currentBuild.currentResult}",
                               to: 'jjdonnelly@deakin.edu.au',
                               attachmentsPattern: '**/var/jenkins_home/logs/tasks/*'
                 }
@@ -121,6 +121,7 @@
         }
     }
 }
+
 
 
 
