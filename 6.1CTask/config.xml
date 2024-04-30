@@ -1,0 +1,85 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@1400.v7fd111b_ec82f">
+  <actions/>
+  <description>This is the project for my 6.1COnTrack Task.</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.38.0">
+      <projectUrl>https://github.com/jjdonnellydeakin/SIT2236.1CTask.git/</projectUrl>
+      <displayName>github_JD</displayName>
+    </com.coravy.hudson.plugins.github.GithubProjectProperty>
+    <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+      <triggers>
+        <com.cloudbees.jenkins.GitHubPushTrigger plugin="github@1.38.0">
+          <spec></spec>
+        </com.cloudbees.jenkins.GitHubPushTrigger>
+      </triggers>
+    </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@3894.vd0f0248b_a_fc4">
+    <script>pipeline {
+    agent any
+
+    stages {
+        stage(&apos;Build&apos;) {
+            steps {
+                // Build the code using Maven
+                sh &apos;mvn clean install&apos;
+            }
+        }
+        stage(&apos;Unit and Integration Tests&apos;) {
+            steps {
+                // Run unit tests using JUnit
+                sh &apos;junit tests&apos;
+
+                // Run integration tests using TestNG
+                sh &apos;testng integration-tests&apos;
+            }
+        }
+        stage(&apos;Code Analysis&apos;) {
+            steps {
+                // Integrate code analysis tool using Jenkins
+                sh &apos;jenkins-code-analysis&apos;
+            }
+        }
+        stage(&apos;Security Scan&apos;) {
+            steps {
+                // Perform security scan using SonarQube
+                sh &apos;sonarqube-scan&apos;
+            }
+            post {
+                always {
+                    // Email notification for security scan stage
+                    emailext subject: &apos;Security Scan Stage Notification&apos;,
+                              body: &apos;Security scan stage completed. See attached logs for details.&apos;,
+                              to: &apos;jjdonnelly@deakin.edu.au&apos;,
+                              attachmentsPattern: &apos;/var/jenkins_home/logs/tasks/*&apos;
+                }
+            }
+        }
+        stage(&apos;Deploy to Staging&apos;) {
+            steps {
+                // Deploy the application to staging server (e.g., AWS EC2 instance)
+                sh &apos;deploy-to-staging&apos;
+            }
+        }
+        stage(&apos;Integration Tests on Staging&apos;) {
+            steps {
+                // Run integration tests on staging environment
+                sh &apos;integration-tests-on-staging&apos;
+            }
+        }
+        stage(&apos;Deploy to Production&apos;) {
+            steps {
+                // Deploy the application to production server (e.g., AWS EC2 instance)
+                sh &apos;deploy-to-production&apos;
+            }
+        }
+    }
+}
+</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>
