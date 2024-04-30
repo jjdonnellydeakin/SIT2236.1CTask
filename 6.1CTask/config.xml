@@ -19,7 +19,9 @@
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@3894.vd0f0248b_a_fc4">
     <script>pipeline {
     agent any
-
+    triggers {
+        pollSCM('*/5 * * * *') // Poll SCM every 5 minutes
+    }
     stages {
         stage('Build') {
             steps {
