@@ -28,7 +28,7 @@ triggers {
         stage('Build') {
             steps {
                 // Build the code using Maven
-                echo 'Building the code using Maven'
+                echo 'Building the code using Maven YAY'
             }
         }
         stage('Unit and Integration Tests') {
