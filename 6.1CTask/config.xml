@@ -17,18 +17,14 @@
     </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@3894.vd0f0248b_a_fc4">
-    <script>pipeline {
+    <script>ppipeline {
     agent any
-      
-triggers {
-        pollSCM('*/30 * * * * *') // Poll SCM every 30 seconds
-    }
-      
+
     stages {
         stage('Build') {
             steps {
                 // Build the code using Maven
-                echo 'Building the code using Maven YAY'
+                echo 'Building the code using Maven'
             }
         }
         stage('Unit and Integration Tests') {
@@ -36,6 +32,22 @@ triggers {
                 // Run unit tests using JUnit and integration tests using TestNG
                 echo 'Running unit tests using JUnit'
                 echo 'Running integration tests using TestNG'
+            }
+            post {
+                success {
+                    // Email notification for stage success
+                    emailext subject: "Unit and Integration Tests - Success",
+                              body: "Unit and integration tests completed successfully.",
+                              to: 'jjdonnelly@deakin.edu.au',
+                              attachmentsPattern: '**/var/jenkins_home/logs/tasks/*'
+                }
+                failure {
+                    // Email notification for stage failure
+                    emailext subject: "Unit and Integration Tests - Failure",
+                              body: "Unit and integration tests failed. Please check the logs for details.",
+                              to: 'jjdonnelly@deakin.edu.au',
+                              attachmentsPattern: '**/var/jenkins_home/logs/tasks/*'
+                }
             }
         }
         stage('Code Analysis') {
@@ -48,6 +60,22 @@ triggers {
             steps {
                 // Perform security scan using SonarQube or other security scanning tool
                 echo 'Performing security scan using SonarQube or other security scanning tool'
+            }
+            post {
+                success {
+                    // Email notification for stage success
+                    emailext subject: "Security Scan - Success",
+                              body: "Security scan completed successfully.",
+                              to: 'jjdonnelly@deakin.edu.au',
+                              attachmentsPattern: '**/var/jenkins_home/logs/tasks/*'
+                }
+                failure {
+                    // Email notification for stage failure
+                    emailext subject: "Security Scan - Failure",
+                              body: "Security scan failed. Please check the logs for details.",
+                              to: 'jjdonnelly@deakin.edu.au',
+                              attachmentsPattern: '**/var/jenkins_home/logs/tasks/*'
+                }
             }
         }
         stage('Deploy to Staging') {
@@ -81,8 +109,7 @@ triggers {
             // Email notification for pipeline failure
             emailext subject: "Pipeline Failure Notification - ${currentBuild.result}",
                       body: "Pipeline failed. Status: ${currentBuild.result}. Please check the logs for details.",
-                      to: 'jjdonnelly@deakin.edu.au',
-                      attachmentsPattern: '/var/jenkins_home/logs/tasks/*'
+                      to: 'jjdonnelly@deakin.edu.au'
         }
     }
 }
